@@ -7,6 +7,7 @@ from app.api.v1.cameras import router as cameras_router
 from app.api.v1.events import router as events_router
 from app.api.v1.management import router as management_router
 from app.api.v1.media import router as media_router
+from app.api.v1.registry import router as registry_router
 
 app = FastAPI(title="Access Control Camera Security API")
 
@@ -24,6 +25,7 @@ app.include_router(cameras_router)
 app.include_router(events_router)
 app.include_router(management_router)
 app.include_router(media_router)
+app.include_router(registry_router)
 
 
 @app.get("/health")
