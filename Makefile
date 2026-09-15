@@ -10,7 +10,7 @@ test:
 	cd backend && pytest
 
 seed:
-	@echo "Seed data is introduced in CHECKPOINT 2."
+	cd backend && python -m app.seed
 
 reset:
 	@echo "Demo reset is introduced in a later checkpoint."
