@@ -21,8 +21,8 @@ def _event_data(event: Event) -> dict[str, object]:
         "start_offset_ms": event.start_offset_ms,
         "end_offset_ms": event.end_offset_ms,
         "confidence": event.confidence,
-        "snapshot_url": event.snapshot_path or event.image_url,
-        "clip_url": event.clip_path or event.video_url,
+        "snapshot_url": f"/api/v1/media/events/{event.id}/image" if event.snapshot_path or event.image_url else None,
+        "clip_url": f"/api/v1/media/events/{event.id}/video" if event.clip_path or event.video_url else None,
     }
 
 

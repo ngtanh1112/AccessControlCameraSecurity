@@ -15,6 +15,9 @@ dependencies = [
     "sqlalchemy",
     "python-jose",
     "passlib[bcrypt]",
+    "ultralytics",
+    "opencv-python-headless",
+    "python-multipart",
 ]
 
 [project.optional-dependencies]

@@ -30,6 +30,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           <button className={path === "/dashboard" ? "nav-link active" : "nav-link"} type="button" onClick={() => navigate("/dashboard")}>Dashboard</button>
           <button className={path === "/cameras" ? "nav-link active" : "nav-link"} type="button" onClick={() => navigate("/cameras")}>Cameras</button>
           <button className={path === "/chat" ? "nav-link active" : "nav-link"} type="button" onClick={() => navigate("/chat")}>Chat</button>
+          {user?.role !== "OPERATOR" && <button className={path === "/management" ? "nav-link active" : "nav-link"} type="button" onClick={() => navigate("/management")}>Management</button>}
+          {user?.role !== "OPERATOR" && <button className={path === "/audit" ? "nav-link active" : "nav-link"} type="button" onClick={() => navigate("/audit")}>Audit</button>}
+          {user?.role === "ADMIN" && <button className={path === "/iva-demo" ? "nav-link active" : "nav-link"} type="button" onClick={() => navigate("/iva-demo")}>IVA Demo</button>}
         </nav>
         <main className="page-content">{children}</main>
       </div>

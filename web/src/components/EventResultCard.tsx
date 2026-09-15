@@ -1,4 +1,7 @@
-import type { EventResult } from "../api/client";
+import { useEffect, useState } from "react";
+
+import { getProtectedMediaUrl, type EventResult } from "../api/client";
+import { useAuth } from "../auth/AuthContext";
 
 function displayOffset(milliseconds: number | null): string {
   if (milliseconds === null) return "—";
@@ -6,13 +9,24 @@ function displayOffset(milliseconds: number | null): string {
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 }
 
-function hasRenderableMedia(url: string | null): url is string {
-  return url !== null && /^(https?:\/\/|\/|data:)/.test(url);
+function useMediaUrl(path: string | null): string | null {
+  const { token } = useAuth();
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!path || !token) return;
+    let currentUrl: string | null = null;
+    void getProtectedMediaUrl(token, path).then((nextUrl) => {
+      currentUrl = nextUrl;
+      setUrl(nextUrl);
+    }).catch(() => setUrl(null));
+    return () => { if (currentUrl) URL.revokeObjectURL(currentUrl); };
+  }, [path, token]);
+  return url;
 }
 
 export function EventResultCard({ event }: { event: EventResult }) {
-  const snapshotUrl = hasRenderableMedia(event.snapshot_url) ? event.snapshot_url : null;
-  const clipUrl = hasRenderableMedia(event.clip_url) ? event.clip_url : null;
+  const snapshotUrl = useMediaUrl(event.snapshot_url);
+  const clipUrl = useMediaUrl(event.clip_url);
 
   return (
     <article className="event-card">
