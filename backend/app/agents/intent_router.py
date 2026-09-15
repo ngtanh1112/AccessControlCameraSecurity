@@ -35,7 +35,10 @@ def route_intent(message: str) -> Intent:
         return Intent.VIEW_VIDEO
     if "camera nào tôi được xem" in text or "camera nao toi duoc xem" in text:
         return Intent.LIST_MY_CAMERAS
-    if "tìm event" in text or "tim event" in text or "tìm sự kiện" in text or "tim su kien" in text:
+    if (
+        ("tìm" in text or "tim" in text)
+        and ("event" in text or "sự kiện" in text or "su kien" in text)
+    ):
         return Intent.SEARCH_EVENT
     if "có gì" in text or "co gi" in text:
         return Intent.SEARCH_EVENT

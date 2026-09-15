@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.auth import router as auth_router
 from app.api.v1.admin import router as admin_router
 from app.api.v1.cameras import router as cameras_router
+from app.api.v1.conversation import router as conversation_router
 from app.api.v1.events import router as events_router
 from app.api.v1.management import router as management_router
 from app.api.v1.media import router as media_router
@@ -22,6 +23,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(admin_router)
 app.include_router(cameras_router)
+app.include_router(conversation_router)
 app.include_router(events_router)
 app.include_router(management_router)
 app.include_router(media_router)
