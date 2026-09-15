@@ -16,8 +16,10 @@ def write_audit(
     *,
     stage: str,
 ) -> None:
-    if stage not in {"TOOL_ENFORCEMENT", "DIRECT_API"}:
-        raise ValueError("Audit stage must be TOOL_ENFORCEMENT or DIRECT_API")
+    if stage not in {"TOOL_ENFORCEMENT", "DIRECT_API", "PRE_AUTHORIZATION"}:
+        raise ValueError(
+            "Audit stage must be TOOL_ENFORCEMENT, DIRECT_API, or PRE_AUTHORIZATION",
+        )
 
     with SessionLocal.begin() as session:
         session.add(
