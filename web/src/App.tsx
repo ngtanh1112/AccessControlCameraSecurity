@@ -1,49 +1,38 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+import { AuthProvider, useAuth } from "./auth/AuthContext";
+import { CamerasPage } from "./pages/CamerasPage";
+import { ChatPage } from "./pages/ChatPage";
+import { DashboardPage } from "./pages/DashboardPage";
+import { LoginPage } from "./pages/LoginPage";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { navigate, useCurrentPath } from "./routes/navigation";
 
-type BackendStatus = "checking" | "ok" | "unavailable";
+function Redirect({ to }: { to: string }) {
+  useEffect(() => navigate(to, true), [to]);
+  return null;
+}
+
+function AppRouter() {
+  const path = useCurrentPath();
+  const { isLoading, token } = useAuth();
+
+  if (isLoading) return <main className="app-loading">Restoring your local session…</main>;
+  if (!token) {
+    if (path !== "/login") return <Redirect to="/login" />;
+    return <LoginPage />;
+  }
+  if (path === "/login") return <Redirect to="/dashboard" />;
+  if (path === "/cameras") {
+    return <ProtectedRoute><CamerasPage /></ProtectedRoute>;
+  }
+  if (path === "/chat") {
+    return <ProtectedRoute><ChatPage /></ProtectedRoute>;
+  }
+  if (path !== "/dashboard") return <Redirect to="/dashboard" />;
+  return <ProtectedRoute><DashboardPage /></ProtectedRoute>;
+}
 
 export default function App() {
-  const [backendStatus, setBackendStatus] = useState<BackendStatus>("checking");
-
-  useEffect(() => {
-    const checkBackendHealth = async () => {
-      try {
-        const response = await fetch(`${apiBaseUrl}/health`);
-        const payload: unknown = await response.json();
-
-        if (
-          response.ok &&
-          typeof payload === "object" &&
-          payload !== null &&
-          "status" in payload &&
-          payload.status === "ok"
-        ) {
-          setBackendStatus("ok");
-          return;
-        }
-      } catch {
-        // The status below communicates that the local backend is not reachable.
-      }
-
-      setBackendStatus("unavailable");
-    };
-
-    void checkBackendHealth();
-  }, []);
-
-  const statusLabel =
-    backendStatus === "ok"
-      ? "OK"
-      : backendStatus === "checking"
-        ? "Checking..."
-        : "Unavailable";
-
-  return (
-    <main>
-      <h1>Access Control Camera Security</h1>
-      <p>Backend Status: {statusLabel}</p>
-    </main>
-  );
+  return <AuthProvider><AppRouter /></AuthProvider>;
 }
