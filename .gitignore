@@ -1,0 +1,22 @@
+# Environment and local Python files
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Local SQLite database
+*.db
+
+# Frontend dependencies and build output
+web/node_modules/
+web/dist/
+
+# Generated media (the data directory structure is introduced in a later checkpoint)
+data/videos/*
+!data/videos/.gitkeep
+data/snapshots/*
+!data/snapshots/.gitkeep
+data/clips/*
+!data/clips/.gitkeep
